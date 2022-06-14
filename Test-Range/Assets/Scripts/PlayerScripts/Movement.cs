@@ -4,16 +4,17 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    [SerializeField]
+    private CharacterController _controller;
+
     //Basic Movement Class for the Player
     [SerializeField]
     float _playerSpeed;
 
-    private Rigidbody _rb;
-
     // Start is called before the first frame update
     void Start()
     {
-        _rb = GetComponent<Rigidbody>();
+        _controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -46,39 +47,32 @@ public class Movement : MonoBehaviour
 
         #region Instant-Movement
         //Instant Movement
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.Translate(Vector3.left * _playerSpeed * Time.deltaTime, Space.World);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.Translate(Vector3.right * _playerSpeed * Time.deltaTime, Space.World);
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            transform.Translate(Vector3.forward * _playerSpeed * Time.deltaTime, Space.World);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.Translate(Vector3.back * _playerSpeed * Time.deltaTime, Space.World);
-        }
+        //if (Input.GetKey(KeyCode.A))
+        //{
+        //    transform.Translate(Vector3.left * _playerSpeed * Time.deltaTime, Space.World);
+        //}
+        //if (Input.GetKey(KeyCode.D))
+        //{
+        //    transform.Translate(Vector3.right * _playerSpeed * Time.deltaTime, Space.World);
+        //}
+        //if (Input.GetKey(KeyCode.W))
+        //{
+        //    transform.Translate(Vector3.forward * _playerSpeed * Time.deltaTime, Space.World);
+        //}
+        //if (Input.GetKey(KeyCode.S))
+        //{
+        //    transform.Translate(Vector3.back * _playerSpeed * Time.deltaTime, Space.World);
+        //}
         #endregion
 
         #region Rotation Based-Movement
         /* Obtains the Horozontal and Vertical Axis's */
-        //float _horizontalInput = Input.GetAxis("Horizontal");
-        //float _verticalInput = Input.GetAxis("Vertical");
+        float _x = Input.GetAxis("Horizontal");
+        float _z = Input.GetAxis("Vertical");
 
-        /* Obtains a new movement Direction */
-        //Vector3 _movementDirection = new Vector3(_horizontalInput, 0.0f, _verticalInput);
-        //_movementDirection.Normalize();
+        Vector3 _move = transform.right * _x + transform.forward * _z;
 
-        //transform.Translate(_movementDirection * _playerSpeed * Time.deltaTime, Space.World);
-
-        //if (_movementDirection != Vector3.zero)
-        //{
-        //    transform.forward = _movementDirection;
-        //}
+        _controller.Move(_move * _playerSpeed * Time.deltaTime);
         #endregion
 
     }

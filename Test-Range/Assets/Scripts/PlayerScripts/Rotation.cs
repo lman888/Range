@@ -5,6 +5,9 @@ using UnityEngine;
 public class Rotation : MonoBehaviour
 {
     [SerializeField]
+    private Transform _playerHead;
+
+    [SerializeField]
     private float _senstivity;
     
     /* Looking Constraints */
@@ -31,9 +34,12 @@ public class Rotation : MonoBehaviour
 
     void MouseRotation()
     {
+        /* Sets the Camera Position to the Head of the Player */
+        this.transform.position = _playerHead.position;
+
         /* Gets the rotation based on the mouse position */
         _yaw += _senstivity * Input.GetAxis("Mouse X");
-        _pitch += _senstivity * Input.GetAxis("Mouse Y");
+        _pitch -= _senstivity * Input.GetAxis("Mouse Y");
 
 
         /* Locks the Down look rotation */
@@ -50,8 +56,10 @@ public class Rotation : MonoBehaviour
 
         Vector3 _lookDirection = new Vector3(_pitch, _yaw, 0.0f);
 
-        /* Creates a new Vector 3 and rotates the player accordingly */
+        /* Creates a new Vector 3 and rotates Camera's position */
         transform.eulerAngles = _lookDirection;
 
+        /* Rotates the Players Head */
+        _playerHead.transform.eulerAngles = _lookDirection;
     }
 }
