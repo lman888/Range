@@ -63,5 +63,23 @@ public class Movement : MonoBehaviour
             transform.Translate(Vector3.back * _playerSpeed * Time.deltaTime, Space.World);
         }
         #endregion
+
+        #region Rotation Based-Movement
+        /* Obtains the Horozontal and Vertical Axis's */
+        //float _horizontalInput = Input.GetAxis("Horizontal");
+        //float _verticalInput = Input.GetAxis("Vertical");
+
+        /* Obtains a new movement Direction */
+        //Vector3 _movementDirection = new Vector3(_horizontalInput, 0.0f, _verticalInput);
+        //_movementDirection.Normalize();
+
+        //transform.Translate(_movementDirection * _playerSpeed * Time.deltaTime, Space.World);
+
+        //if (_movementDirection != Vector3.zero)
+        //{
+        //    transform.forward = _movementDirection;
+        //}
+        #endregion
+
     }
 }

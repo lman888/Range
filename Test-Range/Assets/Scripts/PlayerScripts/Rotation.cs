@@ -5,10 +5,17 @@ using UnityEngine;
 public class Rotation : MonoBehaviour
 {
     [SerializeField]
-    float _rotationSpeed;
+    private float _senstivity;
+    
+    /* Looking Constraints */
     [SerializeField]
-    float _cutoffAngle;
+    private float _lookingUpConstraint;
+    [SerializeField]
+    private float _lookingDownConstraint;
 
+
+    private float _pitch;
+    private float _yaw;
 
     // Start is called before the first frame update
     void Start()
@@ -24,16 +31,27 @@ public class Rotation : MonoBehaviour
 
     void MouseRotation()
     {
-        /* Obtains the Mouse Position from the Center of the screen */
-        Vector3 _mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition + Vector3.forward * 10.0f);
+        /* Gets the rotation based on the mouse position */
+        _yaw += _senstivity * Input.GetAxis("Mouse X");
+        _pitch += _senstivity * Input.GetAxis("Mouse Y");
 
-        float _angle = AngleBetweenPoints(transform.position, _mouseWorldPos);
 
-        transform.rotation = Quaternion.Euler(new Vector3(_angle, _angle, 0));
-    }
+        /* Locks the Down look rotation */
+        if (_pitch >= _lookingDownConstraint)
+        {
+            _pitch = _lookingDownConstraint;
+        }
 
-    float AngleBetweenPoints(Vector2 a, Vector2 b)
-    {
-        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
+        /* Locks the Up look rotation */
+        if (_pitch <= _lookingUpConstraint)
+        {
+            _pitch = _lookingUpConstraint;
+        }
+
+        Vector3 _lookDirection = new Vector3(_pitch, _yaw, 0.0f);
+
+        /* Creates a new Vector 3 and rotates the player accordingly */
+        transform.eulerAngles = _lookDirection;
+
     }
 }
