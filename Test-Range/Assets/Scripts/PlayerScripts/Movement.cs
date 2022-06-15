@@ -10,6 +10,13 @@ public class Movement : MonoBehaviour
     //Basic Movement Class for the Player
     [SerializeField]
     float _playerSpeed;
+    [SerializeField]
+    private float _jumpHeight;
+
+    private bool _groundedPlayer;
+    private Vector3 _playerVelocity;
+    /* Earths natural gravity value */
+    private float _gravityValue = -9.81f;
 
     // Start is called before the first frame update
     void Start()
@@ -73,6 +80,22 @@ public class Movement : MonoBehaviour
         Vector3 _move = transform.right * _x + transform.forward * _z;
 
         _controller.Move(_move * _playerSpeed * Time.deltaTime);
+
+
+        //_groundedPlayer = _controller.isGrounded;
+        if (_groundedPlayer && _playerVelocity.y <= 0)
+        {
+            _playerVelocity.y = 0.0f;
+        }
+
+        if (Input.GetButtonDown("Jump") && _groundedPlayer)
+        {
+            _playerVelocity.y += Mathf.Sqrt(_jumpHeight * -3.0f * _gravityValue);
+        }
+
+        _playerVelocity.y += _gravityValue * Time.deltaTime;
+        _controller.Move(_playerVelocity * Time.deltaTime);
+
         #endregion
 
     }
