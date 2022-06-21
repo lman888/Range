@@ -6,9 +6,11 @@ public class BasicGun : MonoBehaviour
 {
     /* The bullet this gun will use */
     [SerializeField]
-    private Transform _bullet;
+    private GameObject _bullet;
     [SerializeField]
     private Transform _bulletSpawn;
+    [SerializeField]
+    private float _bulletSpeed;
 
 
     // Start is called before the first frame update
@@ -28,7 +30,10 @@ public class BasicGun : MonoBehaviour
         /* Funily enough, this fires the gun */
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Instantiate(_bullet, _bulletSpawn);
+            /* Spawns the bullet and has its forward vec the same as the guns forward vec */
+            GameObject _projectile = Instantiate(_bullet, _bulletSpawn);
+
+            _projectile.transform.position = transform.position + transform.forward;
         }
     }
 }
