@@ -11,6 +11,11 @@ public class BasicGun : MonoBehaviour
     private Transform _bulletSpawn;
     [SerializeField]
     private float _bulletSpeed;
+    [SerializeField]
+    private float _shootPower;
+
+    [SerializeField]
+    Camera _cam;
 
 
     // Start is called before the first frame update
@@ -30,10 +35,29 @@ public class BasicGun : MonoBehaviour
         /* Funily enough, this fires the gun */
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            /* Spawns the bullet and has its forward vec the same as the guns forward vec */
-            GameObject _projectile = Instantiate(_bullet, _bulletSpawn);
+            /* Just a ray that goes through the middle of your screen */
+            Ray _ray = _cam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0.0f));
+            RaycastHit _hit;
 
-            _projectile.transform.position = transform.position + transform.forward;
+            Vector3 _targetPoint;
+            if (Physics.Raycast(_ray, out _hit))
+            {
+                _targetPoint = _hit.point;
+            }
+            else
+            {
+                /* Pointer away from the player */
+                _targetPoint = _ray.GetPoint(75);
+            }
+
+            Vector3 _direction = _targetPoint - _bulletSpawn.position;
+
+            /* Spawns the bullet and has its forward vec the same as the guns forward vec */
+            GameObject _projectile = Instantiate(_bullet, _bulletSpawn.position, Quaternion.identity);
+
+            _projectile.transform.forward = _direction.normalized;
+
+            _projectile.GetComponent<Rigidbody>().AddForce(_direction.normalized * _shootPower, ForceMode.Impulse);
         }
     }
 }
